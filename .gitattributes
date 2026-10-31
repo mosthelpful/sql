@@ -1,0 +1,6 @@
+# Keep line endings consistent for every reader
+* text=auto
+*.sql text eol=lf
+*.md  text eol=lf
+*.py  text eol=lf
+*.csv text eol=lf

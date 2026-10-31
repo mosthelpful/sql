@@ -1,0 +1,3 @@
+supplier_id,supplier_name,email,status
+4,Brightway,sales@brightway.example.com,active
+5,"Northwind Paper, Inc.",,inactive
