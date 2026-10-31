@@ -15,7 +15,7 @@ They contain the sample database the book uses, and every example the book runs 
 | `appendix_e/interview.sql` | Answers to the interview questions in Appendix E. |
 | `appendix_f/excel_to_sql.sql` | The SQL side of each Excel example in Appendix F. |
 | `python/` | The Python examples from Chapter 43, one runnable script each. |
-| `data/` | The CSV files the book loads: `suppliers.csv` (Chapter 9) and `books.csv` (Chapter 44's library project). If you start psql in this folder, write `'data/suppliers.csv'` or `'data/books.csv'` in the book's `\copy` command. |
+| `data/` | The CSV files the book loads: `suppliers.csv` (Chapter 9) and `books.csv` (Chapter 44's library project). If you start psql in the repository's folder (as Getting Started does), write `'data/suppliers.csv'` or `'data/books.csv'` in the book's `\copy` command. |
 | `ERRATA.md` | Corrections to the book. |
 
 Chapters 1, 3, 39 and 45 have no runnable examples, so they have no script.
