@@ -1,7 +1,7 @@
 -- The Most Helpful SQL Guide, Second Edition
 -- Chapter 9: Creating a Table
 --
--- Every example in this part of the book that runs on PostgreSQL,
+-- Every example in this chapter that runs on PostgreSQL,
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch09_creating_tables.sql
@@ -9,6 +9,10 @@
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
 -- You can also copy any single example into a query window.
+--
+-- The book's \copy step, which loads suppliers.csv, isn't in this file:
+-- \copy is a psql command. Run it in psql from the repository's
+-- folder, reading FROM 'data/suppliers.csv'.
 
 BEGIN;
 

@@ -1,7 +1,7 @@
 -- The Most Helpful SQL Guide, Second Edition
 -- Chapter 37: JSON and XML
 --
--- Every example in this part of the book that runs on PostgreSQL,
+-- Every example in this chapter that runs on PostgreSQL,
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch37_json_xml.sql
@@ -496,8 +496,8 @@ ORDER BY c.customer_id;
 -- ------------------------------------------------------------
 -- Try It 3
 -- A stock count arrives as [{"product_id": 3, "stock": 30},
--- {"product_id": 6, "stock": 12}]. Update products from it, then
--- list every product's stock.
+-- {"product_id": 6, "stock": 12}]. Update products from it, in a
+-- transaction you roll back, then list every product's stock.
 -- Changes data; the savepoint undoes the change, as in the book.
 -- ------------------------------------------------------------
 SAVEPOINT example;

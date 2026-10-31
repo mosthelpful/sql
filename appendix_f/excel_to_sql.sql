@@ -1,7 +1,7 @@
 -- The Most Helpful SQL Guide, Second Edition
 -- Appendix F: From Excel to SQL
 --
--- Every example in this part of the book that runs on PostgreSQL,
+-- Every example in this appendix that runs on PostgreSQL,
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f appendix_f/excel_to_sql.sql

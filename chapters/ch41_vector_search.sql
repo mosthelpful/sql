@@ -1,7 +1,7 @@
 -- The Most Helpful SQL Guide, Second Edition
 -- Chapter 41: Vector Search for AI Applications
 --
--- Every example in this part of the book that runs on PostgreSQL,
+-- Every example in this chapter that runs on PostgreSQL,
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch41_vector_search.sql
@@ -15,7 +15,7 @@ BEGIN;
 -- ------------------------------------------------------------
 -- Example 1: Storing Vectors
 -- ------------------------------------------------------------
-CREATE EXTENSION vector;
+CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Result: CREATE EXTENSION
 
@@ -508,7 +508,7 @@ LIMIT 1;
 -- Try It 3
 -- The help center switches to a model called handmade-v2. Queue
 -- every chunk whose embedding came from another model, or has none,
--- then list the queue.
+-- then count the queue.
 -- Changes data; the savepoint undoes the change, as in the book.
 -- ------------------------------------------------------------
 SAVEPOINT example;
@@ -541,7 +541,8 @@ SAVEPOINT example;
 DROP TABLE embedding_queue, help_chunks,
     vec_items, product_embeddings;
 DROP FUNCTION queue_chunk_embedding();
-DROP EXTENSION vector;
+-- Skip this if you used pgvector before
+DROP EXTENSION IF EXISTS vector;
 
 ROLLBACK TO SAVEPOINT example;
 

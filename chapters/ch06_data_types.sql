@@ -1,7 +1,7 @@
 -- The Most Helpful SQL Guide, Second Edition
 -- Chapter 6: Data Types
 --
--- Every example in this part of the book that runs on PostgreSQL,
+-- Every example in this chapter that runs on PostgreSQL,
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch06_data_types.sql
