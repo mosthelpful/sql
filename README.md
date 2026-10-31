@@ -57,7 +57,7 @@ Some notes:
 
 The examples were tested on PostgreSQL 16. A few use features added in PostgreSQL 15 or 16, such as MERGE and the IS JSON test, and the book points these out.
 
-Chapter 41 needs the pgvector extension, version 0.8.2 or later; 0.8.2 fixed a security flaw in earlier versions. (The examples were tested with 0.8.1, and later 0.8 releases only fix bugs.) Install it from your operating system's packages or from [github.com/pgvector/pgvector](https://github.com/pgvector/pgvector), or use a cloud PostgreSQL service that includes it. Chapters 25 and 30 use the btree_gist and pgcrypto extensions, which ship with PostgreSQL.
+Chapter 41 needs the pgvector extension, version 0.8 or later. Use the current release (0.8.7 at this writing), because 0.8.2, 0.8.6 and 0.8.7 each fixed a security flaw in earlier versions; the examples were tested with 0.8.1 and give the same results on later releases. Get it from your operating system's packages or from [github.com/pgvector/pgvector](https://github.com/pgvector/pgvector), or use a cloud PostgreSQL service that includes it. Chapters 25 and 30 use the btree_gist and pgcrypto extensions, which ship with PostgreSQL.
 
 The Python scripts need Python 3.11 or later, and Chapter 43's "Setting Up" section walks through the setup. In a virtual environment, run `pip install "psycopg[binary,pool]" sqlalchemy`, then point DATABASE_URL at your database: `export DATABASE_URL=postgresql://localhost/sqlguide` on macOS or Linux, or `$env:DATABASE_URL = "postgresql://localhost/sqlguide"` in Windows PowerShell. Run a script from this folder, for example `python python/01_round_trip.py`. Some scripts commit changes, so reload `sample_db.sql` afterwards.
 
