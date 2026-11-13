@@ -46,9 +46,9 @@ Under most examples is the result the book prints, as a comment, so you can chec
 
 ## Running the Examples
 
-**One at a time.** Copy an example into psql, pgAdmin, DBeaver or db<>fiddle and run it. Some examples build on an earlier one in the same chapter, such as a table or view it created, so work through a chapter in order. If an example changes data, wrap it in `BEGIN;` and `ROLLBACK;` to keep the data as the book expects, or reload `sample_db.sql` afterwards. Chapter 30 is the exception: its examples create roles and switch between them, so run that file whole, as below.
+**One at a time.** Copy an example into psql, pgAdmin, DBeaver or db<>fiddle and run it. Some examples build on an earlier one in the same chapter, such as a table or view it created, so work through a chapter in order. If an example changes data, wrap it in `BEGIN;` and `ROLLBACK;` to keep the data as the book expects, or reload `sample_db.sql` afterward. Chapter 30 is the exception: its examples create roles and switch between them, so run that file whole, as below.
 
-**A whole chapter at once.** In psql:
+**A whole chapter at once.** In a terminal, from the unzipped folder (or inside psql, `\i chapters/ch10_basic_queries.sql`):
 
 ```
 psql -d sqlguide -f chapters/ch10_basic_queries.sql

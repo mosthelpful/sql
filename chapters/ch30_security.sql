@@ -14,7 +14,7 @@
 -- Its examples create roles and use SET LOCAL ROLE, which works
 -- only inside a transaction. If you run examples one at a time,
 -- wrap them in BEGIN and ROLLBACK, or run the cleanup at the end
--- of this file afterwards to drop the roles.
+-- of this file afterward to drop the roles.
 
 BEGIN;
 
