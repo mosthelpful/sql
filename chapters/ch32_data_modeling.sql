@@ -5,6 +5,7 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch32_data_modeling.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -254,7 +255,7 @@ ROLLBACK TO SAVEPOINT example;
 -- (1 row)
 
 -- ------------------------------------------------------------
--- Example 8: Try It
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

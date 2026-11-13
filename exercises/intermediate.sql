@@ -4,6 +4,7 @@
 -- The answer to every question, with the result the book prints.
 -- Load sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f exercises/intermediate.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -34,7 +35,7 @@ ORDER BY e.employee_id;
 -- Exercise 2
 -- For each customer who has ordered, show their sales in three
 -- columns: shipped, still processing and cancelled. An order line is
--- worth quantity × unit_price. (Chapter 20)
+-- worth quantity x unit_price. (Chapter 20)
 -- ------------------------------------------------------------
 -- 2. Sales per customer, by order status
 SELECT c.first_name,
@@ -192,10 +193,11 @@ ORDER BY e.employee_id;
 WITH order_totals AS (
     SELECT o.customer_id, o.order_id,
            o.order_date,
-           SUM(oi.quantity * oi.unit_price)
-               AS total
+           COALESCE(
+               SUM(oi.quantity * oi.unit_price),
+               0.00) AS total
     FROM orders o
-    JOIN order_items oi
+    LEFT JOIN order_items oi
         ON oi.order_id = o.order_id
     GROUP BY o.customer_id, o.order_id,
              o.order_date
@@ -444,7 +446,7 @@ ORDER BY chain;
 -- Exercise 15
 -- A login form looks members up by email, ignoring case. On a
 -- throwaway table of 20,000 members with mixed-case emails, create
--- an index that WHERE LOWER(email) = … can use, and show that the
+-- an index that WHERE LOWER(email) = ... can use, and show that the
 -- query uses it. (Chapters 19 and 21)
 -- Changes data; the savepoint undoes the change, as in the book.
 -- ------------------------------------------------------------
@@ -462,10 +464,10 @@ INSERT INTO member_logins (member_id, email)
 SELECT n, 'Member' || n || '@Example.com'
 FROM generate_series(1, 20000) n;
 
-ANALYZE member_logins;
-
 CREATE INDEX idx_member_logins_email_lower
     ON member_logins (LOWER(email));
+
+ANALYZE member_logins;
 
 EXPLAIN (COSTS OFF)
 SELECT member_id, email
@@ -475,10 +477,8 @@ WHERE LOWER(email) = 'member42@example.com';
 ROLLBACK TO SAVEPOINT example;
 
 -- Plan:
---   Bitmap Heap Scan on member_logins
---     Recheck Cond: (lower((email)::text) = 'member42@example.com'::text)
---     ->  Bitmap Index Scan on idx_member_logins_email_lower
---           Index Cond: (lower((email)::text) = 'member42@example.com'::text)
+--   Index Scan using idx_member_logins_email_lower on member_logins
+--     Index Cond: (lower((email)::text) = 'member42@example.com'::text)
 
 -- ------------------------------------------------------------
 -- Exercise 16
@@ -609,7 +609,7 @@ ORDER BY c.table_name;
 -- ------------------------------------------------------------
 -- Exercise 19
 -- Ethan (customer 5) places his first order, 107, on March 20, 2024,
--- for two Monitors. Add the order, then add its line with INSERT …
+-- for two Monitors. Add the order, then add its line with INSERT ...
 -- SELECT, copying the Monitor's price from products, and return the
 -- new line with its value. (Chapters 10 and 36)
 -- Changes data; the savepoint undoes the change, as in the book.
@@ -673,7 +673,7 @@ ORDER BY c.customer_id;
 -- (4 rows)
 
 -- ------------------------------------------------------------
--- Example 1: Answers
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

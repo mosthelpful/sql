@@ -20,25 +20,33 @@ They contain the sample database the book uses, and every example the book runs 
 
 Chapters 1, 3, 39 and 45 have no runnable examples, so they have no script.
 
-Under each example is the result the book prints, as a comment, so you can check your own result against it.
+Under most examples is the result the book prints, as a comment, so you can check your own result against it.
 
 ## Getting Started
 
 1. **Get PostgreSQL 16 or later.** Install it from [postgresql.org/download](https://www.postgresql.org/download/), or use [db<>fiddle](https://dbfiddle.uk) to run SQL in your browser with nothing to install. Chapter 5 of the book walks through both. (Chapter 41 needs a server with the pgvector extension; see Versions.)
 2. **Download these files.** On GitHub, click **Code**, then **Download ZIP**, and unzip it. If you use Git, you can clone the repository instead.
-3. **Create a database and load the sample data.** In a terminal, from the unzipped folder:
+3. **Create a database and load the sample data.** Use a new, empty database: the script drops and recreates tables named customers, orders, products and four others. In psql (on Windows, open **SQL Shell (psql)** from the Start menu):
 
    ```
-   createdb sqlguide
-   psql -d sqlguide -f sample_db.sql
+   CREATE DATABASE sqlguide;
+   \c sqlguide
+   \i sample_db.sql
    ```
 
-   Or, inside psql, run `CREATE DATABASE sqlguide;`, then `\c sqlguide`, then `\i sample_db.sql`. In db<>fiddle or a graphical tool such as pgAdmin or DBeaver, paste the contents of `sample_db.sql` into a query window and run it.
+   If psql can't find the file, give its full path, with forward slashes even on Windows: `\i C:/Users/you/Downloads/sql-main/sample_db.sql`. Or, in a terminal, from the unzipped folder:
+
+   ```
+   createdb -U postgres sqlguide
+   psql -U postgres -d sqlguide -f sample_db.sql
+   ```
+
+   Leave out `-U postgres` if your own login is a database role, as it is with Homebrew or Postgres.app on a Mac. In db<>fiddle or a graphical tool such as pgAdmin or DBeaver, paste the contents of `sample_db.sql` into a query window and run it.
 4. **Check.** `SELECT COUNT(*) FROM employees;` should return 8.
 
 ## Running the Examples
 
-**One at a time.** Copy an example into psql, pgAdmin, DBeaver or db<>fiddle and run it. Some examples build on an earlier one in the same chapter, such as a table or view it created, so work through a chapter in order. If an example changes data, wrap it in `BEGIN;` and `ROLLBACK;` to keep the data as the book expects, or reload `sample_db.sql` afterwards.
+**One at a time.** Copy an example into psql, pgAdmin, DBeaver or db<>fiddle and run it. Some examples build on an earlier one in the same chapter, such as a table or view it created, so work through a chapter in order. If an example changes data, wrap it in `BEGIN;` and `ROLLBACK;` to keep the data as the book expects, or reload `sample_db.sql` afterwards. Chapter 30 is the exception: its examples create roles and switch between them, so run that file whole, as below.
 
 **A whole chapter at once.** In psql:
 
@@ -46,7 +54,7 @@ Under each example is the result the book prints, as a comment, so you can check
 psql -d sqlguide -f chapters/ch10_basic_queries.sql
 ```
 
-Each file runs as one transaction and ends with `ROLLBACK`, so it leaves your database exactly as it was. Examples that change data, or that fail on purpose to show an error message, are wrapped in a savepoint and undone. That's how the book's results were produced, so your output should match the book's row for row.
+Add `-U postgres` if psql says your role doesn't exist. Each file runs as one transaction and ends with `ROLLBACK`, so it leaves your database exactly as it was. Examples that change data, or that fail on purpose to show an error message, are wrapped in a savepoint and undone. That's how the book's results were produced, so your output should match the book's row for row.
 
 Some notes:
 
@@ -55,11 +63,11 @@ Some notes:
 
 ## Versions
 
-The examples were tested on PostgreSQL 16. A few use features added in PostgreSQL 15 or 16, such as MERGE and the IS JSON test, and the book points these out.
+The examples were tested on PostgreSQL 16. They don't all run on earlier versions: MERGE needs 15 and the IS JSON test needs 16.
 
-Chapter 41 needs the pgvector extension, version 0.8 or later. Use the current release (0.8.7 at this writing), because 0.8.2, 0.8.6 and 0.8.7 each fixed a security flaw in earlier versions; the examples were tested with 0.8.1 and give the same results on later releases. Get it from your operating system's packages or from [github.com/pgvector/pgvector](https://github.com/pgvector/pgvector), or use a cloud PostgreSQL service that includes it. Chapters 25 and 30 use the btree_gist and pgcrypto extensions, which ship with PostgreSQL.
+Chapter 41 needs the pgvector extension, version 0.8 or later. Use the current release (0.8.7 at this writing): 0.8.2, 0.8.6 and 0.8.7 each fixed a security flaw. The examples were tested with 0.8.1. Get it from your operating system's packages or from [github.com/pgvector/pgvector](https://github.com/pgvector/pgvector), or use a cloud PostgreSQL service that includes it. Chapters 25 and 30 use the btree_gist and pgcrypto extensions, which come with PostgreSQL (on some Linux systems, in its contrib package). Chapter 30 creates roles, and Chapters 25, 30 and 41 create extensions, so run those files as a superuser such as postgres.
 
-The Python scripts need Python 3.11 or later, and Chapter 43's "Setting Up" section walks through the setup. In a virtual environment, run `pip install "psycopg[binary,pool]" sqlalchemy`, then point DATABASE_URL at your database: `export DATABASE_URL=postgresql://localhost/sqlguide` on macOS or Linux, or `$env:DATABASE_URL = "postgresql://localhost/sqlguide"` in Windows PowerShell. Run a script from this folder, for example `python python/01_round_trip.py`. Some scripts commit changes, so reload `sample_db.sql` afterwards.
+The Python scripts need Python 3.11 or later, and Chapter 43's "Setting Up" section walks through the setup. In a virtual environment, run `pip install "psycopg[binary,pool]" sqlalchemy`, then point DATABASE_URL at your database: `export DATABASE_URL=postgresql://user:password@localhost/sqlguide` on macOS or Linux, or `$env:DATABASE_URL = "postgresql://user:password@localhost/sqlguide"` in Windows PowerShell, with your own user name and password. Run a script from this folder, for example `python python/01_round_trip.py`. Scripts 01, 03, 08 and 13 commit changes, so reload `sample_db.sql` after each.
 
 Later versions should give the same results, with two exceptions. Query plans can differ slightly between versions and settings. PostgreSQL 18 and later also print extra detail in EXPLAIN ANALYZE output; Chapter 22 explains it.
 

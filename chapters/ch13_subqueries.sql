@@ -5,6 +5,7 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch13_subqueries.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -220,7 +221,7 @@ CROSS JOIN LATERAL (
     SELECT o.order_id, o.order_date
     FROM orders o
     WHERE o.customer_id = c.customer_id
-    ORDER BY o.order_date DESC
+    ORDER BY o.order_date DESC, o.order_id DESC
     LIMIT 1
 ) lo
 ORDER BY c.customer_id;

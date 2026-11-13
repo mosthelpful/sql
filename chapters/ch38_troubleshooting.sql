@@ -5,6 +5,7 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch38_troubleshooting.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -254,7 +255,7 @@ SELECT pg_current_logfile();
 ROLLBACK TO SAVEPOINT example;
 
 -- ------------------------------------------------------------
--- Example 17: Try It
+-- Try It 3, the question: a query to fix. Its answer is below.
 -- ------------------------------------------------------------
 SELECT c.first_name,
        COUNT(o.order_id) AS shipped
@@ -344,7 +345,7 @@ ORDER BY c.customer_id;
 -- (5 rows)
 
 -- ------------------------------------------------------------
--- Example 18: Try It
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

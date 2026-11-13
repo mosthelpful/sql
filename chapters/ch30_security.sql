@@ -5,10 +5,16 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch30_security.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
--- You can also copy any single example into a query window.
+--
+-- Run this file whole, logged in as a superuser such as postgres.
+-- Its examples create roles and use SET LOCAL ROLE, which works
+-- only inside a transaction. If you run examples one at a time,
+-- wrap them in BEGIN and ROLLBACK, or run the cleanup at the end
+-- of this file afterwards to drop the roles.
 
 BEGIN;
 
@@ -253,3 +259,23 @@ ROLLBACK TO SAVEPOINT example;
 -- Undo everything this file changed.
 -- ------------------------------------------------------------
 ROLLBACK;
+
+-- ------------------------------------------------------------
+-- Cleanup. You need this only if you ran examples one at a time
+-- without rolling back. Remove the leading "-- " to run it.
+-- ------------------------------------------------------------
+-- ALTER TABLE employees
+--     DISABLE ROW LEVEL SECURITY;
+-- ALTER TABLE orders
+--     DISABLE ROW LEVEL SECURITY;
+-- DROP POLICY IF EXISTS engineering_rows
+--     ON employees;
+-- DROP POLICY IF EXISTS alice_orders ON orders;
+-- DROP OWNED BY ch30_reporting, ch30_maria,
+--     ch30_engineering, ch30_warehouse,
+--     ch30_alice;
+-- DROP ROLE IF EXISTS ch30_reporting,
+--     ch30_maria, ch30_engineering,
+--     ch30_warehouse, ch30_alice;
+-- -- Skip this if you used pgcrypto before
+-- DROP EXTENSION IF EXISTS pgcrypto;

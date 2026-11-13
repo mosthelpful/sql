@@ -4,6 +4,7 @@
 -- The answer to every question, with the result the book prints.
 -- Load sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f exercises/advanced.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -220,9 +221,9 @@ ROLLBACK TO SAVEPOINT example;
 -- 6. Several orders, but little spending
 SELECT c.first_name, c.last_name,
        COUNT(DISTINCT o.order_id) AS order_count,
-       SUM(oi.quantity * oi.unit_price)
-           FILTER (WHERE o.status <> 'cancelled')
-           AS spent
+       COALESCE(SUM(oi.quantity * oi.unit_price)
+           FILTER (WHERE o.status <> 'cancelled'),
+           0.00) AS spent
 FROM customers c
 JOIN orders o
     ON o.customer_id = c.customer_id
@@ -231,9 +232,9 @@ JOIN order_items oi
 GROUP BY c.customer_id, c.first_name,
          c.last_name
 HAVING COUNT(DISTINCT o.order_id) > 1
-    AND SUM(oi.quantity * oi.unit_price)
-        FILTER (WHERE o.status <> 'cancelled')
-        < 1500
+    AND COALESCE(SUM(oi.quantity * oi.unit_price)
+        FILTER (WHERE o.status <> 'cancelled'),
+        0.00) < 1500
 ORDER BY c.customer_id;
 
 -- Result:
@@ -424,8 +425,8 @@ ROLLBACK TO SAVEPOINT example;
 -- Exercise 12
 -- Write a procedure that gives every employee in a department a
 -- percentage raise. It should reject a raise of 0 or less or of more
--- than 10 percent, a department that doesn't exist and a department
--- with no employees. Give Finance a 3.5% raise. (Chapter 23)
+-- than 10%, a department that doesn't exist and a department with no
+-- employees. Give Finance a 3.5% raise. (Chapter 23)
 -- Changes data; the savepoint undoes the change, as in the book.
 -- ------------------------------------------------------------
 SAVEPOINT example;
@@ -1000,7 +1001,7 @@ ORDER BY d.department_id;
 -- (5 rows)
 
 -- ------------------------------------------------------------
--- Example 2: Answers
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

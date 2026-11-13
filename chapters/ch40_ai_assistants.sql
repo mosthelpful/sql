@@ -5,6 +5,7 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch40_ai_assistants.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -308,7 +309,7 @@ SELECT current_setting('application_name')
 -- (1 row)
 
 -- ------------------------------------------------------------
--- Example 15: Try It
+-- Try It 1, the question: a query to fix. Its answer is below.
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;
@@ -329,7 +330,7 @@ ORDER BY d.department_id;
 ROLLBACK TO SAVEPOINT example;
 
 -- ------------------------------------------------------------
--- Example 16: Try It
+-- Try It 2, the question: a query to fix. Its answer is below.
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;
@@ -344,7 +345,7 @@ ORDER BY employee_id;
 ROLLBACK TO SAVEPOINT example;
 
 -- ------------------------------------------------------------
--- Example 17: Try It
+-- Try It 3, the question: a query to fix. Its answer is below.
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

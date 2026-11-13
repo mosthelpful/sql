@@ -4,6 +4,7 @@
 -- The answer to every question, with the result the book prints.
 -- Load sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f exercises/basic.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -187,7 +188,7 @@ ORDER BY o.order_id;
 -- ------------------------------------------------------------
 -- Exercise 10
 -- Find the orders worth more than 1,000. An order's value is the sum
--- of quantity × unit_price over its lines in order_items. (Chapter
+-- of quantity x unit_price over its lines in order_items. (Chapter
 -- 12)
 -- ------------------------------------------------------------
 -- 10. Orders worth more than 1,000
@@ -309,7 +310,8 @@ ROLLBACK TO SAVEPOINT example;
 -- 14. Departments with no employees
 SELECT department_id FROM departments
 EXCEPT
-SELECT department_id FROM employees;
+SELECT department_id FROM employees
+ORDER BY department_id;
 
 -- Result:
 --  department_id
@@ -444,7 +446,7 @@ ORDER BY employee_id;
 -- (2 rows)
 
 -- ------------------------------------------------------------
--- Example 1: Answers
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;

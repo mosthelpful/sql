@@ -5,6 +5,7 @@
 -- in book order, with the result the book prints. Load
 -- sample_db.sql first. To run the whole file in psql:
 --   psql -d sqlguide -f chapters/ch42_graph_data.sql
+-- (add -U postgres if psql says your role does not exist)
 -- It runs as one transaction and rolls back at the end, so your
 -- database is left unchanged. Examples that change data or fail on
 -- purpose are wrapped in a savepoint and undone, as in the book.
@@ -419,7 +420,7 @@ ORDER BY start_order, service_name;
 -- ------------------------------------------------------------
 -- Try It 1
 -- List every station that can reach Elmhurst, by following the links
--- backwards from it.
+-- backward from it.
 -- ------------------------------------------------------------
 -- 1. Stations that can reach Elmhurst
 WITH RECURSIVE sources AS (
@@ -511,7 +512,7 @@ ORDER BY depends_on;
 -- (4 rows)
 
 -- ------------------------------------------------------------
--- Example 17: Try It
+-- Cleanup: drops what the examples created
 -- The book runs this without printing its result.
 -- ------------------------------------------------------------
 SAVEPOINT example;
